@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Jose' Online Shopping Mall</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <header>
+
+        <div class="site-title">
+            <h1>Jose' Online Shopping Mall</h1>
+        </div>
+
+        <nav class="navbar">
+
+            <ul class="nav-links">
+
+                <li><a href="index.html">Home</a></li>
+
+                <li><a href="products.html">Products</a></li>
+
+                <li><a href="categories.html">Categories</a></li>
+
+                <li><a href="about.html">About</a></li>
+
+                <li><a href="contact.html">Contact</a></li>
+
+            </ul>
+
+            <div class="nav-right">
+
+                <a href="register.html" class="register-btn">
+                    Register
+                </a>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+    <!-- Login Card -->
+
+    <section class="login-container">
+
+        <div class="login-card">
+
+            <h2>Login</h2>
+
+            <p class="subtitle">
+                Sign in to continue shopping.
+            </p>
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Enter your username"
+                        required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Password</label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <div id="message"></div>
+
+            <p>
+
+                Don't have an account?
+
+                <a href="register.html">
+
+                    Register
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <footer>
+
+        <p>
+
+            © <span id="year"></span>
+
+            Jose' Online Shopping Mall
+
+        </p>
+
+    </footer>
+
+<script src="js/login.js"></script>
+
+<script>
+
+document.getElementById("year").textContent=new Date().getFullYear();
+
+</script>
+
+</body>
+
+</html>

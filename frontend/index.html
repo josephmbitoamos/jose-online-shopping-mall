@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jose' Online Shopping Mall</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+
+    <div class="site-title">
+        <h1>Jose' Online Shopping Mall</h1>
+    </div>
+
+    <nav class="navbar">
+
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#products-section">Products</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+        </ul>
+
+        <div class="nav-right">
+
+            <input
+                type="text"
+                placeholder="Search products...">
+
+            <button class="cart-btn">
+                🛒 Cart
+            </button>
+
+            <a href="login.html"
+   id="loginLink"
+   class="login-btn">
+    Login
+</a>
+
+<a href="register.html"
+   id="registerLink"
+   class="register-btn">
+    Register
+</a>
+
+<button
+    id="logoutBtn"
+    class="login-btn"
+    style="display:none;">
+    Logout
+</button>
+        </div>
+
+    </nav>
+
+</header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+
+    <h1>Welcome to Jose' Online Shopping Mall</h1>
+
+    <p>
+        Everything You Need In One Place. <br>
+        Fast Delivery| Secure Payments| Best Prices.
+    </p>
+
+    <button class="shop-btn">
+        Shop Now
+    </button>
+
+</section>
+
+    <!-- FEATURED PRODUCTS -->
+    <section id="products-section">
+
+        <h2>Featured Products</h2>
+
+        <div id="product-list">
+            <!-- Products will be inserted by JavaScript -->
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            &copy; <span id="year"></span>
+            Jose' Online Shopping Mall
+        </p>
+
+        <p>
+            Secure Shopping • Fast Delivery • Customer Support
+        </p>
+
+    </footer>
+
+    <script>
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+    </script>
+
+    <script src="js/main.js"></script>
+
+</body>
+</html>
