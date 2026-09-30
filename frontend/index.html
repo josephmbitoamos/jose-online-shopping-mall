@@ -19,26 +19,30 @@
 
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="#products-section">Products</a></li>
-            <li><a href="#">Categories</a></li>
+            <li><a href="products.html">Products</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="contact_us.html">Contact</a></li>
+            <li></li><a href="categories.html" class="active">Categories</a></ul>li>
+            
         </ul>
 
-        <div class="nav-right">
+<div class="nav-right">
 
-            <input
-                type="text"
-                placeholder="Search products...">
+    <input
+        type="text"
+        placeholder="Search products...">
 
-            <button class="cart-btn">
-                🛒 Cart
-            </button>
+    <a href="shopping_cart.html" class="cart-btn">
+        🛒 Cart (<span id="cartCount">0</span>)
+    </a>
 
-            <a href="login.html"
-   id="loginLink"
-   class="login-btn">
-    Login
+    <a href="login.html"
+       id="loginLink"
+       class="login-btn">
+        Login
+    </a>
+
+</div>
 </a>
 
 <a href="register.html"
@@ -106,6 +110,7 @@
     </script>
 
     <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
 
 </body>
 </html>

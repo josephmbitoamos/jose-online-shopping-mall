@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Jose' Online Shopping Mall - Categories</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        /* CATEGORIES PAGE */
+
+        .categories-section {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .categories-section h2 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .categories-section > p {
+            margin-bottom: 30px;
+        }
+
+
+        /* CATEGORY BOXES */
+
+        .category-container {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 20px;
+
+            max-width: 1200px;
+
+            margin: auto;
+
+        }
+
+
+        .category {
+
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            padding: 20px;
+
+            background-color: white;
+
+            box-shadow:
+                0 3px 8px rgba(0,0,0,0.15);
+
+            min-height: 220px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: space-between;
+
+        }
+
+
+        .category h3 {
+
+            margin-top: 0;
+
+            font-size: 20px;
+
+        }
+
+
+        .category p {
+
+            font-size: 15px;
+
+            line-height: 1.5;
+
+        }
+
+
+        .category a {
+
+            display: inline-block;
+
+            padding: 10px 15px;
+
+            background-color: #6a0dad;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 5px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .category a:hover {
+
+            background-color: #4b087c;
+
+        }
+
+
+        /* MOBILE DEVICES */
+
+        @media (max-width: 900px) {
+
+            .category-container {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .category-container {
+
+                grid-template-columns: 1fr;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVIGATION -->
+
+    <header>
+
+        <div class="site-title">
+
+            <h1>Jose' Online Shopping Mall</h1>
+
+        </div>
+
+
+        <nav class="navbar">
+
+            <ul class="nav-links">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="products.html">Products</a>
+                </li>
+
+                <li>
+                   <a href="products_details.html" class="active">Product Details</a>
+                </li>
+
+                <li>
+                    <a href="about.html">About</a>
+                </li>
+
+                <li>
+                    <a href="contact_us.html">Contact</a>
+                </li>
+
+                <li>
+                    <a href="search_results.html" class="active">Search Results</a>
+                </li>
+
+            </ul>
+
+
+            <div class="nav-right">
+
+                <input
+                    type="text"
+                    placeholder="Search products...">
+
+
+                <button class="cart-btn">
+
+                    🛒 Cart
+
+                </button>
+
+
+                <a href="login.html"
+                   id="loginLink"
+                   class="login-btn">
+
+                    Login
+
+                </a>
+
+
+                <a href="register.html"
+                   id="registerLink"
+                   class="register-btn">
+
+                    Register
+
+                </a>
+
+
+                <button
+                    id="logoutBtn"
+                    class="login-btn"
+                    style="display:none;">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- CATEGORIES SECTION -->
+
+    <main>
+
+        <section class="categories-section">
+
+            <h2>Product Categories</h2>
+
+            <p>
+                Explore our wide range of products
+                available at Jose' Online Shopping Mall.
+            </p>
+
+
+            <!-- CATEGORY BOXES -->
+
+            <div class="category-container">
+
+
+                <!-- CATEGORY 1 -->
+
+                <div class="category">
+
+                    <h3>📱 Electronics</h3>
+
+                    <p>
+                        Smartphones, laptops,
+                        headphones, televisions
+                        and other electronic devices.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 2 -->
+
+                <div class="category">
+
+                    <h3>👕 Clothing & Fashion</h3>
+
+                    <p>
+                        Men's, women's and children's
+                        clothing, shoes, jackets and
+                        fashion accessories.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 3 -->
+
+                <div class="category">
+
+                    <h3>🏠 Home Appliances</h3>
+
+                    <p>
+                        Blenders, kettles, microwaves,
+                        refrigerators and other
+                        useful home appliances.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 4 -->
+
+                <div class="category">
+
+                    <h3>💄 Beauty & Personal Care</h3>
+
+                    <p>
+                        Skincare products, hair products,
+                        cosmetics and personal-care
+                        items.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 5 -->
+
+                <div class="category">
+
+                    <h3>🛒 Groceries & Food</h3>
+
+                    <p>
+                        Household groceries, packaged
+                        foods, beverages and everyday
+                        essentials.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 6 -->
+
+                <div class="category">
+
+                    <h3>⚽ Sports & Fitness</h3>
+
+                    <p>
+                        Sportswear, fitness equipment,
+                        shoes, balls and sporting
+                        accessories.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 7 -->
+
+                <div class="category">
+
+                    <h3>📚 Books & Stationery</h3>
+
+                    <p>
+                        Books, notebooks, pens,
+                        office supplies and school
+                        stationery.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+
+                <!-- CATEGORY 8 -->
+
+                <div class="category">
+
+                    <h3>🧸 Kids & Baby Products</h3>
+
+                    <p>
+                        Children's clothing, toys,
+                        school items and baby
+                        essentials.
+                    </p>
+
+                    <a href="products.html">
+                        View Products
+                    </a>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+
+            &copy;
+
+            <span id="year"></span>
+
+            Jose' Online Shopping Mall
+
+        </p>
+
+
+        <p>
+
+            Secure Shopping • Fast Delivery •
+            Customer Support
+
+        </p>
+
+    </footer>
+
+
+
+    <!-- YEAR -->
+
+    <script>
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+    </script>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>

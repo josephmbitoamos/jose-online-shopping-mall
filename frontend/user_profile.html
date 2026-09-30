@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile - Jose' Online Shopping Mall</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f0ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #4a148c;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .profile-container {
+            width: 90%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-container h2 {
+            text-align: center;
+            color: #6a1b9a;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: #6a1b9a;
+            outline: none;
+        }
+
+        input[readonly] {
+            background-color: #eeeeee;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4a148c;
+        }
+
+        #message {
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .back-dashboard {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-dashboard a {
+            color: #6a1b9a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-dashboard a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background-color: #4a148c;
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>Jose' Online Shopping Mall</h1>
+
+        <p>My User Profile</p>
+
+    </header>
+
+
+    <nav>
+
+        <a href="user_dashboard.html">Dashboard</a>
+
+        <a href="products.html">Products</a>
+
+        <a href="shopping_cart.html">Cart</a>
+
+        <a href="logout.html">Logout</a>
+
+    </nav>
+
+
+    <div class="profile-container">
+
+        <h2>Edit My Profile</h2>
+
+        <p id="message"></p>
+
+
+        <form id="profileForm">
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    readonly
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Phone Number
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="firstName">
+                    First Name
+                </label>
+
+                <input
+                    type="text"
+                    id="firstName"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="lastName">
+                    Last Name
+                </label>
+
+                <input
+                    type="text"
+                    id="lastName"
+                >
+
+            </div>
+
+
+            <button type="submit">
+                Save Changes
+            </button>
+
+        </form>
+
+
+        <div class="back-dashboard">
+
+            <a href="user_dashboard.html">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        © 2026 Jose' Online Shopping Mall.
+        All Rights Reserved.
+
+    </footer>
+
+
+    <script>
+
+        const API_URL = "http://127.0.0.1:8000";
+
+        const accessToken = localStorage.getItem("access");
+
+        const message = document.getElementById("message");
+
+
+        /*
+         * Check whether the user is logged in
+         */
+
+        if (!accessToken) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        /*
+         * Load the logged-in user's profile
+         */
+
+        async function loadProfile() {
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/users/me/`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization": `Bearer ${accessToken}`,
+                            "Content-Type": "application/json"
+                        }
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                if (response.ok) {
+
+                    console.log("User profile:", data);
+
+
+                    document.getElementById("username").value =
+                        data.username || "";
+
+                    document.getElementById("email").value =
+                        data.email || "";
+
+                    document.getElementById("phone").value =
+                        data.phone || "";
+
+                    document.getElementById("firstName").value =
+                        data.first_name || "";
+
+                    document.getElementById("lastName").value =
+                        data.last_name || "";
+
+                }
+
+                else {
+
+                    console.error(
+                        "Unable to load profile:",
+                        data
+                    );
+
+                    localStorage.removeItem("access");
+
+                    localStorage.removeItem("refresh");
+
+                    window.location.href = "login.html";
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Error connecting to Django:",
+                    error
+                );
+
+                message.style.color = "red";
+
+                message.innerHTML =
+                    "Unable to connect to the server.";
+
+            }
+
+        }
+
+
+        /*
+         * Save profile changes
+         */
+
+        document
+            .getElementById("profileForm")
+            .addEventListener(
+                "submit",
+                updateProfile
+            );
+
+
+        async function updateProfile(event) {
+
+            event.preventDefault();
+
+
+            message.style.color = "blue";
+
+            message.innerHTML =
+                "Saving changes...";
+
+
+            const updatedData = {
+
+                email:
+                    document.getElementById("email").value,
+
+                phone:
+                    document.getElementById("phone").value,
+
+                first_name:
+                    document.getElementById("firstName").value,
+
+                last_name:
+                    document.getElementById("lastName").value
+
+            };
+
+
+            try {
+
+                const response = await fetch(
+                    `${API_URL}/users/me/`,
+                    {
+                        method: "PATCH",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${accessToken}`,
+
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify(updatedData)
+
+                    }
+                );
+
+
+                const data = await response.json();
+
+
+                console.log(
+                    "Update response:",
+                    data
+                );
+
+
+                if (response.ok) {
+
+                    message.style.color = "green";
+
+                    message.innerHTML =
+                        "Profile updated successfully!";
+
+                }
+
+                else {
+
+                    console.error(
+                        "Profile update failed:",
+                        data
+                    );
+
+                    message.style.color = "red";
+
+                    if (data.email) {
+
+                        message.innerHTML =
+                            data.email[0];
+
+                    }
+
+                    else if (data.phone) {
+
+                        message.innerHTML =
+                            data.phone[0];
+
+                    }
+
+                    else {
+
+                        message.innerHTML =
+                            "Unable to update profile.";
+
+                    }
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Update error:",
+                    error
+                );
+
+                message.style.color = "red";
+
+                message.innerHTML =
+                    "Unable to connect to the server.";
+
+            }
+
+        }
+
+
+        /*
+         * Load profile when page opens
+         */
+
+        loadProfile();
+
+    </script>
+
+</body>
+
+</html>

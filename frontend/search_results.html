@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Jose' Online Shopping Mall - Search Results</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVIGATION -->
+
+    <header>
+
+        <div class="site-title">
+
+            <h1>Jose' Online Shopping Mall</h1>
+
+        </div>
+
+
+        <nav class="navbar">
+
+            <ul class="nav-links">
+
+                <li>
+                    <a href="index.html">Home</a>
+                </li>
+
+                <li>
+                    <a href="products.html">Products</a>
+                </li>
+
+                <li>
+                    <a href="categories.html">Categories</a>
+                </li>
+
+                <li>
+                    <a href="about.html">About</a>
+                </li>
+
+                <li>
+                    <a href="contact_us.html">Contact</a>
+                </li>
+
+                <li>
+                    <a href="products_details.html">
+                        Product Details
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <div class="nav-right">
+
+                <input
+                    type="text"
+                    id="navbarSearch"
+                    placeholder="Search products...">
+
+
+                <button
+                    class="cart-btn"
+                    onclick="performNavbarSearch()">
+
+                    Search
+
+                </button>
+
+                
+<button
+    class="cart-btn"
+    onclick="window.location.href='shopping_cart.html'">
+
+    🛒 Cart (<span id="cartCount">0</span>)
+
+</button>
+
+
+                <a href="login.html"
+                   id="loginLink"
+                   class="login-btn">
+
+                    Login
+
+                </a>
+
+
+                <a href="register.html"
+                   id="registerLink"
+                   class="register-btn">
+
+                    Register
+
+                </a>
+
+
+                <button
+                    id="logoutBtn"
+                    class="login-btn"
+                    style="display:none;">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- SEARCH RESULTS PAGE -->
+
+    <main>
+
+        <section class="products-page">
+
+
+            <h2>Search Results</h2>
+
+
+            <p>
+                Search results for your selected product.
+            </p>
+
+
+            <!-- SEARCH AREA -->
+
+            <div class="search-section">
+
+                <input
+                    type="text"
+                    id="searchBox"
+                    placeholder="Enter product name...">
+
+
+                <button
+                    class="cart-btn"
+                    onclick="searchProducts()">
+
+                    Search
+
+                </button>
+
+            </div>
+
+
+            <hr>
+
+
+            <!-- SEARCH RESULT MESSAGE -->
+
+            <h3 id="searchTitle">
+                Available Products
+            </h3>
+
+
+            <!-- SEARCH RESULTS -->
+
+           <div
+                 class="product-container"
+                 id="searchResults">
+            </div>
+
+            <!-- NO RESULTS MESSAGE -->
+
+            <p
+                id="noResults"
+                style="display:none;">
+
+                No products were found matching your search.
+
+            </p>
+
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+
+            &copy;
+
+            <span id="year"></span>
+
+            Jose' Online Shopping Mall
+
+        </p>
+
+
+        <p>
+
+            Secure Shopping • Fast Delivery •
+            Customer Support
+
+        </p>
+
+    </footer>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Shopping Cart - Jose' Online Shopping Mall</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+    .cart-container {
+        width: 90%;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .cart-container h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    .cart-items {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 100px 1fr 120px 150px 100px;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .cart-item:last-child {
+        border-bottom: none;
+    }
+
+    .cart-item-image {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .cart-item-info h3 {
+        margin: 0 0 8px 0;
+        color: #333;
+    }
+
+    .cart-item-info p {
+        margin: 5px 0;
+        color: #666;
+    }
+
+    .item-price {
+        font-weight: bold;
+        color: #6a1b9a;
+    }
+
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .quantity-control button {
+        width: 35px;
+        height: 35px;
+        border: none;
+        background-color: #6a1b9a;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .quantity-control button:hover {
+        background-color: #4a126b;
+    }
+
+    .quantity-control input {
+        width: 50px;
+        height: 35px;
+        box-sizing: border-box;
+        text-align: center;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .item-subtotal {
+        text-align: center;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .remove-btn {
+        background-color: #d32f2f;
+        color: white;
+        border: none;
+        padding: 9px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .remove-btn:hover {
+        background-color: #a50000;
+    }
+
+    .cart-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+        gap: 15px;
+    }
+
+    .cart-actions a,
+    .cart-actions button {
+        padding: 12px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+    }
+
+    .continue-shopping {
+        background-color: #6a1b9a;
+        color: white;
+    }
+
+    .clear-cart {
+        background-color: #d32f2f;
+        color: white;
+    }
+
+    .continue-shopping:hover {
+        background-color: #4a126b;
+    }
+
+    .clear-cart:hover {
+        background-color: #a50000;
+    }
+
+    .cart-summary {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+
+    .cart-summary h3 {
+        color: #6a1b9a;
+        border-bottom: 2px solid #f3e8ff;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 0;
+        border-top: 2px solid #ddd;
+        margin-top: 10px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 15px;
+        background-color: #6a1b9a;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 17px;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    .checkout-btn:hover {
+        background-color: #4a126b;
+    }
+
+    .empty-cart {
+        text-align: center;
+        padding: 60px 20px;
+    }
+
+    .empty-cart h3 {
+        font-size: 24px;
+        color: #555;
+    }
+
+    .empty-cart p {
+        color: #777;
+        margin-bottom: 25px;
+    }
+
+    .empty-cart a {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #6a1b9a;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    #cartMessage {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .loading-message {
+        text-align: center;
+        padding: 50px;
+        font-size: 18px;
+    }
+
+    @media (max-width: 900px) {
+
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-summary {
+            position: static;
+        }
+
+        .cart-item {
+            grid-template-columns: 80px 1fr;
+            gap: 15px;
+        }
+
+        .cart-item-image {
+            width: 70px;
+            height: 70px;
+        }
+
+        .quantity-control,
+        .item-subtotal,
+        .remove-btn {
+            grid-column: 2;
+            justify-self: start;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<!-- ==============================
+     HEADER
+============================== -->
+
+<header>
+
+    <div class="site-title">
+
+        <h1>
+            Jose' Online Shopping Mall
+        </h1>
+
+    </div>
+
+
+    <nav class="navbar">
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="user_dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="products.html">
+                    Products
+                </a>
+            </li>
+
+            <li>
+                <a href="categories.html">
+                    Categories
+                </a>
+            </li>
+
+            <li>
+                <a href="order_hitory.html">
+                    My Orders
+                </a>
+            </li>
+
+            <li>
+                <a href="shopping_cart.html"
+                   class="active">
+
+                    🛒 Cart
+                    <span id="cartCount">0</span>
+
+                </a>
+            </li>
+
+            <li>
+                <a href="user_profile.html">
+                    My Profile
+                </a>
+            </li>
+
+        </ul>
+
+
+        <div class="nav-right">
+
+            <button
+                id="logoutBtn"
+                class="login-btn">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ==============================
+     CART
+============================== -->
+
+<main class="cart-container">
+
+    <h2>
+        My Shopping Cart
+    </h2>
+
+
+    <p id="cartMessage"></p>
+
+
+    <div id="cartContent">
+
+        <div class="loading-message">
+
+            Loading your cart...
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- ==============================
+     FOOTER
+============================== -->
+
+<footer>
+
+    <p>
+
+        &copy;
+
+        <span id="year"></span>
+
+        Jose' Online Shopping Mall
+
+    </p>
+
+
+    <p>
+
+        Secure Shopping • Fast Delivery • Customer Support
+
+    </p>
+
+</footer>
+
+
+
+<!-- ==============================
+     JAVASCRIPT
+============================== -->
+
+<script>
+
+    const API_URL =
+        "http://127.0.0.1:8000";
+
+
+    // ==========================================
+    // GET ACCESS TOKEN
+    // ==========================================
+
+    const accessToken =
+        localStorage.getItem("access");
+
+
+    // ==========================================
+    // CHECK LOGIN
+    // ==========================================
+
+    if (!accessToken) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    // ==========================================
+    // CURRENT YEAR
+    // ==========================================
+
+    document
+        .getElementById("year")
+        .textContent =
+        new Date().getFullYear();
+
+
+
+    // ==========================================
+    // SHOW MESSAGE
+    // ==========================================
+
+    function showMessage(
+        message,
+        isError = false
+    ) {
+
+        const messageElement =
+            document.getElementById(
+                "cartMessage"
+            );
+
+
+        messageElement.textContent =
+            message;
+
+
+        messageElement.style.color =
+            isError
+                ? "#d32f2f"
+                : "#2e7d32";
+
+
+        setTimeout(
+            function() {
+
+                messageElement.textContent =
+                    "";
+
+            },
+            3000
+        );
+
+    }
+
+
+
+    // ==========================================
+    // LOAD CART FROM DJANGO
+    // ==========================================
+
+    async function loadCart() {
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL + "/shop/cart/",
+                    {
+
+                        method: "GET",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                accessToken,
+
+                            "Content-Type":
+                                "application/json"
+
+                        }
+
+                    }
+                );
+
+
+            // ==================================
+            // SESSION EXPIRED
+            // ==================================
+
+            if (response.status === 401) {
+
+                localStorage.removeItem(
+                    "access"
+                );
+
+                localStorage.removeItem(
+                    "refresh"
+                );
+
+
+                alert(
+                    "Your login session has expired. Please log in again."
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+                return;
+
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load cart."
+                );
+
+            }
+
+
+            const cart =
+                await response.json();
+
+
+            displayCart(cart);
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Cart loading error:",
+                error
+            );
+
+
+            document.getElementById(
+                "cartContent"
+            ).innerHTML = `
+
+                <section class="cart-items">
+
+                    <div class="empty-cart">
+
+                        <h3>
+                            Unable to load your cart
+                        </h3>
+
+                        <p>
+                            Please check your connection
+                            and try again.
+                        </p>
+
+                        <button
+                            class="continue-shopping"
+                            onclick="loadCart()">
+
+                            Try Again
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            `;
+
+        }
+
+    }
+
+
+
+    // ==========================================
+    // DISPLAY CART
+    // ==========================================
+
+    function displayCart(cart) {
+
+        const cartContent =
+            document.getElementById(
+                "cartContent"
+            );
+
+
+        const items =
+            cart.items || [];
+
+
+        // ======================================
+        // UPDATE CART COUNT
+        // ======================================
+
+        updateCartCount(items);
+
+
+        // ======================================
+        // EMPTY CART
+        // ======================================
+
+        if (items.length === 0) {
+
+            cartContent.innerHTML = `
+
+                <section class="cart-items">
+
+                    <div class="empty-cart">
+
+                        <h3>
+                            Your Shopping Cart is Empty
+                        </h3>
+
+                        <p>
+                            You have not added any
+                            products to your cart yet.
+                        </p>
+
+                        <a href="products.html">
+
+                            Continue Shopping
+
+                        </a>
+
+                    </div>
+
+                </section>
+
+            `;
+
+            return;
+
+        }
+
+
+        // ======================================
+        // CART LAYOUT
+        // ======================================
+
+        let cartHTML = `
+
+            <div class="cart-layout">
+
+                <section class="cart-items">
+
+        `;
+
+
+        let subtotal = 0;
+
+
+        // ======================================
+        // CART ITEMS
+        // ======================================
+
+        items.forEach(
+            function(item) {
+
+                const product =
+                    item.product;
+
+
+                const price =
+                    Number(
+                        item.price ||
+                        product.price ||
+                        0
+                    );
+
+
+                const quantity =
+                    Number(
+                        item.quantity
+                    ) || 1;
+
+
+                const itemSubtotal =
+                    Number(
+                        item.subtotal ||
+                        (price * quantity)
+                    );
+
+
+                subtotal +=
+                    itemSubtotal;
+
+
+                // ==============================
+                // PRODUCT IMAGE
+                // ==============================
+
+                let imageURL = "";
+
+
+                if (product.image) {
+
+                    if (
+                        product.image.startsWith(
+                            "http"
+                        )
+                    ) {
+
+                        imageURL =
+                            product.image;
+
+                    }
+
+                    else {
+
+                        imageURL =
+                            API_URL +
+                            product.image;
+
+                    }
+
+                }
+
+
+                cartHTML += `
+
+                    <div class="cart-item">
+
+
+                        <!-- IMAGE -->
+
+                        <div>
+
+                            ${
+                                imageURL
+                                ? `
+                                    <img
+
+                                        src="${imageURL}"
+
+                                        class="cart-item-image"
+
+                                        alt="${product.name}"
+
+                                        onerror="
+                                            this.style.display='none';
+                                        "
+
+                                    >
+                                  `
+                                : `
+                                    <div>
+                                        No Image
+                                    </div>
+                                  `
+                            }
+
+                        </div>
+
+
+                        <!-- PRODUCT DETAILS -->
+
+                        <div class="cart-item-info">
+
+                            <h3>
+
+                                ${product.name}
+
+                            </h3>
+
+
+                            <p>
+
+                                Product ID:
+                                ${product.id}
+
+                            </p>
+
+
+                            <p class="item-price">
+
+                                KSh
+                                ${price.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                )}
+
+                            </p>
+
+                        </div>
+
+
+                        <!-- QUANTITY -->
+
+                        <div class="quantity-control">
+
+                            <button
+                                type="button"
+                                onclick="
+                                    decreaseQuantity(
+                                        ${product.id},
+                                        ${quantity}
+                                    )
+                                ">
+
+                                −
+
+                            </button>
+
+
+                            <input
+
+                                type="number"
+
+                                min="1"
+
+                                value="${quantity}"
+
+                                onchange="
+                                    changeQuantity(
+                                        ${product.id},
+                                        this.value
+                                    )
+                                "
+
+                            >
+
+
+                            <button
+                                type="button"
+                                onclick="
+                                    increaseQuantity(
+                                        ${product.id},
+                                        ${quantity}
+                                    )
+                                ">
+
+                                +
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- SUBTOTAL -->
+
+                        <div class="item-subtotal">
+
+                            KSh
+                            ${itemSubtotal.toLocaleString(
+                                undefined,
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }
+                            )}
+
+                        </div>
+
+
+                        <!-- REMOVE -->
+
+                        <div>
+
+                            <button
+
+                                type="button"
+
+                                class="remove-btn"
+
+                                onclick="
+                                    removeItem(
+                                        ${product.id},
+                                        '${product.name.replace(
+                                            /'/g,
+                                            "\\'"
+                                        )}'
+                                    )
+                                "
+
+                            >
+
+                                Remove
+
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        // ======================================
+        // DELIVERY
+        // ======================================
+
+        const deliveryFee =
+            subtotal > 0
+                ? 200
+                : 0;
+
+
+        const total =
+            subtotal + deliveryFee;
+
+
+        // ======================================
+        // ACTIONS AND SUMMARY
+        // ======================================
+
+        cartHTML += `
+
+                    <div class="cart-actions">
+
+                        <a
+                            href="products.html"
+                            class="continue-shopping">
+
+                            ← Continue Shopping
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="clear-cart"
+                            onclick="clearCart()">
+
+                            Clear Cart
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- CART SUMMARY -->
+
+                <section class="cart-summary">
+
+                    <h3>
+
+                        Cart Summary
+
+                    </h3>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <span>
+
+                            KSh
+                            ${subtotal.toLocaleString(
+                                undefined,
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Delivery
+                        </span>
+
+                        <span>
+
+                            KSh
+                            ${deliveryFee.toFixed(2)}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="total-row">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <span>
+
+                            KSh
+                            ${total.toLocaleString(
+                                undefined,
+                                {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2
+                                }
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="checkout.html"
+                        class="checkout-btn">
+
+                        Proceed to Checkout
+
+                    </a>
+
+                </section>
+
+            </div>
+
+        `;
+
+
+        cartContent.innerHTML =
+            cartHTML;
+
+    }
+
+
+
+    // ==========================================
+    // UPDATE CART COUNT
+    // ==========================================
+
+    function updateCartCount(items) {
+
+        let totalItems = 0;
+
+
+        items.forEach(
+            function(item) {
+
+                totalItems +=
+                    Number(item.quantity) || 0;
+
+            }
+        );
+
+
+        document.getElementById(
+            "cartCount"
+        ).textContent =
+            totalItems;
+
+    }
+
+
+
+    // ==========================================
+    // UPDATE QUANTITY
+    // ==========================================
+
+    async function updateQuantity(
+        productId,
+        quantity
+    ) {
+
+        try {
+
+            const response =
+                await fetch(
+                    API_URL +
+                    "/shop/cart/update/",
+                    {
+
+                        method: "PUT",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " +
+                                accessToken
+
+                        },
+
+                        body: JSON.stringify({
+
+                            product_id:
+                                productId,
+
+                            quantity:
+                                quantity
+
+                        })
+
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                localStorage.removeItem(
+                    "access"
+                );
+
+                localStorage.removeItem(
+                    "refresh"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+                return;
+
+            }
+
+
+            if (!response.ok) {
+
+                const error =
+                    await response.json();
+
+                console.error(
+                    "Update cart error:",
+                    error
+                );
+
+
+                showMessage(
+                    "Unable to update quantity.",
+                    true
+                );
+
+
+                return;
+
+            }
+
+
+            const cart =
+                await response.json();
+
+
+            displayCart(cart);
+
+
+            showMessage(
+                "Cart updated successfully."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Quantity update error:",
+                error
+            );
+
+
+            showMessage(
+                "Connection error while updating cart.",
+                true
+            );
+
+        }
+
+    }
+
+
+
+    // ==========================================
+    // INCREASE QUANTITY
+    // ==========================================
+
+    function increaseQuantity(
+        productId,
+        currentQuantity
+    ) {
+
+        updateQuantity(
+            productId,
+            Number(currentQuantity) + 1
+        );
+
+    }
+
+
+
+    // ==========================================
+    // DECREASE QUANTITY
+    // ==========================================
+
+    function decreaseQuantity(
+        productId,
+        currentQuantity
+    ) {
+
+        const newQuantity =
+            Number(currentQuantity) - 1;
+
+
+        if (newQuantity < 1) {
+
+            removeItem(
+                productId,
+                "this product"
+            );
+
+
+            return;
+
+        }
+
+
+        updateQuantity(
+            productId,
+            newQuantity
+        );
+
+    }
+
+
+
+    // ==========================================
+    // CHANGE QUANTITY
+    // ==========================================
+
+    function changeQuantity(
+        productId,
+        newQuantity
+    ) {
+
+        let quantity =
+            parseInt(newQuantity);
+
+
+        if (
+            isNaN(quantity) ||
+            quantity < 1
+        ) {
+
+            quantity = 1;
+
+        }
+
+
+        updateQuantity(
+            productId,
+            quantity
+        );
+
+    }
+
+
+
+    // ==========================================
+    // REMOVE ITEM
+    // ==========================================
+
+    async function removeItem(
+        productId,
+        productName
+    ) {
+
+        const confirmed =
+            confirm(
+                "Remove " +
+                productName +
+                " from your cart?"
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    API_URL +
+                    "/shop/cart/remove/" +
+                    productId +
+                    "/",
+
+                    {
+
+                        method: "DELETE",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                accessToken
+
+                        }
+
+                    }
+
+                );
+
+
+            if (response.status === 401) {
+
+                localStorage.removeItem(
+                    "access"
+                );
+
+                localStorage.removeItem(
+                    "refresh"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+
+                return;
+
+            }
+
+
+            if (
+                !response.ok &&
+                response.status !== 204
+            ) {
+
+                showMessage(
+                    "Unable to remove item.",
+                    true
+                );
+
+
+                return;
+
+            }
+
+
+            await loadCart();
+
+
+            showMessage(
+                productName +
+                " removed from your cart."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Remove item error:",
+                error
+            );
+
+
+            showMessage(
+                "Connection error while removing item.",
+                true
+            );
+
+        }
+
+    }
+
+
+
+    // ==========================================
+    // CLEAR CART
+    // ==========================================
+
+    async function clearCart() {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to clear your entire cart?"
+            );
+
+
+        if (!confirmed) {
+
+            return;
+
+        }
+
+
+        try {
+
+            /*
+             * There is currently no dedicated
+             * clear-cart endpoint in Django.
+             *
+             * Therefore we remove each cart item
+             * using the existing DELETE endpoint.
+             */
+
+            const cartResponse =
+                await fetch(
+                    API_URL + "/shop/cart/",
+                    {
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                accessToken
+
+                        }
+
+                    }
+                );
+
+
+            if (!cartResponse.ok) {
+
+                throw new Error(
+                    "Unable to load cart."
+                );
+
+            }
+
+
+            const cart =
+                await cartResponse.json();
+
+
+            const items =
+                cart.items || [];
+
+
+            for (
+                const item of items
+            ) {
+
+                await fetch(
+
+                    API_URL +
+                    "/shop/cart/remove/" +
+                    item.product.id +
+                    "/",
+
+                    {
+
+                        method: "DELETE",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                accessToken
+
+                        }
+
+                    }
+
+                );
+
+            }
+
+
+            await loadCart();
+
+
+            showMessage(
+                "Your cart has been cleared."
+            );
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Clear cart error:",
+                error
+            );
+
+
+            showMessage(
+                "Unable to clear your cart.",
+                true
+            );
+
+        }
+
+    }
+
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            function() {
+
+                localStorage.removeItem(
+                    "access"
+                );
+
+                localStorage.removeItem(
+                    "refresh"
+                );
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+
+
+    // ==========================================
+    // LOAD CART WHEN PAGE OPENS
+    // ==========================================
+
+    loadCart();
+
+</script>
+
+</body>
+
+</html>

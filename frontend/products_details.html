@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Jose' Online Shopping Mall - Product Details</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+
+    <style>
+
+        /* PRODUCT DETAILS PAGE */
+
+        .product-details-section {
+
+            padding: 40px;
+
+            text-align: center;
+
+        }
+
+
+        .product-details-section h2 {
+
+            font-size: 32px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        /* PRODUCT DETAILS BOX */
+
+        .product-details {
+
+            max-width: 900px;
+
+            margin: auto;
+
+            display: flex;
+
+            gap: 40px;
+
+            background-color: white;
+
+            padding: 30px;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.15);
+
+            text-align: left;
+
+        }
+
+
+        /* PRODUCT IMAGE */
+
+        .product-image {
+
+            width: 45%;
+
+            text-align: center;
+
+        }
+
+
+        .product-image img {
+
+            width: 100%;
+
+            max-width: 350px;
+
+            height: 350px;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+        }
+
+
+        /* PRODUCT INFORMATION */
+
+        .product-info {
+
+            width: 55%;
+
+        }
+
+
+        .product-info h3 {
+
+            font-size: 28px;
+
+            margin-top: 0;
+
+        }
+
+
+        .product-description {
+
+            font-size: 16px;
+
+            line-height: 1.6;
+
+        }
+
+
+        .price {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #6a0dad;
+
+        }
+
+
+        .availability {
+
+            color: green;
+
+            font-weight: bold;
+
+        }
+
+
+        /* QUANTITY */
+
+        .quantity {
+
+            margin-top: 20px;
+
+        }
+
+
+        .quantity input {
+
+            width: 60px;
+
+            padding: 8px;
+
+            font-size: 16px;
+
+        }
+
+
+        /* ADD TO CART */
+
+        .add-cart-btn {
+
+            background-color: #6a0dad;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 25px;
+
+            border-radius: 5px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            margin-top: 20px;
+
+        }
+
+
+        .add-cart-btn:hover {
+
+            background-color: #4b087c;
+
+        }
+
+
+        /* BUY NOW */
+
+        .buy-btn {
+
+            background-color: #333;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 25px;
+
+            border-radius: 5px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            margin-top: 20px;
+
+            margin-left: 10px;
+
+        }
+
+
+        .buy-btn:hover {
+
+            background-color: #555;
+
+        }
+
+
+        /* PRODUCT INFORMATION */
+
+        .product-information {
+
+            max-width: 900px;
+
+            margin: 30px auto;
+
+            background-color: white;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 3px 10px rgba(0,0,0,0.15);
+
+            text-align: left;
+
+        }
+
+
+        .product-information h3 {
+
+            color: #6a0dad;
+
+        }
+
+
+        .product-information ul {
+
+            line-height: 1.8;
+
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .product-details {
+
+                flex-direction: column;
+
+            }
+
+
+            .product-image,
+
+            .product-info {
+
+                width: 100%;
+
+            }
+
+
+            .product-image img {
+
+                height: 250px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVIGATION -->
+
+    <header>
+
+        <div class="site-title">
+
+            <h1>Jose' Online Shopping Mall</h1>
+
+        </div>
+
+
+        <nav class="navbar">
+
+            <ul class="nav-links">
+
+                <li>
+                    <a href="index.html">
+                        Home
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="products.html">
+                        Products
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="categories.html">
+                        Categories
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="about.html">
+                        About
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="contact_us.html">
+                        Contact
+                    </a>
+                </li>
+
+                <li>
+                    <a href="search_results.html" class="active">Search Results</a>
+                </li>
+
+            </ul>
+
+
+            <div class="nav-right">
+
+                <input
+                    type="text"
+                    placeholder="Search products...">
+
+
+              
+                    <a href="shopping_cart.html" class="cart-btn"> 🛒 Cart (<span id="cartCount">0</span>)
+
+
+
+                <a href="login.html"
+                   id="loginLink"
+                   class="login-btn">
+
+                    Login
+
+                </a>
+
+
+                <a href="register.html"
+                   id="registerLink"
+                   class="register-btn">
+
+                    Register
+
+                </a>
+
+
+                <button
+                    id="logoutBtn"
+                    class="login-btn"
+                    style="display:none;">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- PRODUCT DETAILS -->
+
+    <main>
+
+        <section class="product-details-section">
+
+            <h2>Product Details</h2>
+
+
+            <div class="product-details">
+
+
+                <!-- PRODUCT IMAGE -->
+
+                <div class="product-image">
+
+                    <img
+                        src="images/laptop.jpg"
+                        alt="HP Laptop">
+
+                </div>
+
+
+
+                <!-- PRODUCT INFORMATION -->
+
+                <div class="product-info">
+
+                    <h3>
+                        HP Laptop
+                    </h3>
+
+
+                    <p class="product-description">
+
+                        A reliable HP laptop suitable for
+                        students, business professionals
+                        and everyday computing.
+
+                    </p>
+
+
+                    <p class="price">
+
+                        KSh 65,000
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Product Code:
+                        </strong>
+
+                        HP-LAP-001
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Category:
+                        </strong>
+
+                        Electronics
+
+                    </p>
+
+
+                    <p class="availability">
+
+                        ✓ In Stock
+
+                    </p>
+
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="quantity">
+
+                        <label for="quantity">
+
+                            <strong>
+                                Quantity:
+                            </strong>
+
+                        </label>
+
+
+                        <input
+                            type="number"
+                            id="quantity"
+                            value="1"
+                            min="1">
+
+                    </div>
+
+
+
+                    <!-- BUTTONS -->
+
+                    <button
+                        class="add-cart-btn"
+                        onclick="addToCart()">
+
+                        🛒 Add to Cart
+
+                    </button>
+
+
+                    <button
+                        class="buy-btn">
+
+                        Buy Now
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ADDITIONAL PRODUCT INFORMATION -->
+
+            <div class="product-information">
+
+                <h3>
+                    Product Information
+                </h3>
+
+
+                <ul>
+
+                    <li>
+                        Brand: HP
+                    </li>
+
+                    <li>
+                        Product Type: Laptop
+                    </li>
+
+                    <li>
+                        Screen Size: 15.6 inches
+                    </li>
+
+                    <li>
+                        Storage: 512 GB SSD
+                    </li>
+
+                    <li>
+                        RAM: 8 GB
+                    </li>
+
+                    <li>
+                        Operating System: Windows
+                    </li>
+
+                    <li>
+                        Warranty: 1 Year
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+            <!-- DELIVERY INFORMATION -->
+
+            <div class="product-information">
+
+                <h3>
+                    Delivery Information
+                </h3>
+
+
+                <p>
+
+                    We offer fast and reliable delivery
+                    to customers across Kenya.
+
+                </p>
+
+
+                <ul>
+
+                    <li>
+                        Nairobi: Same day or next day
+                    </li>
+
+                    <li>
+                        Other counties: 1–3 business days
+                    </li>
+
+                    <li>
+                        Secure packaging
+                    </li>
+
+                    <li>
+                        Order tracking available
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+
+            &copy;
+
+            <span id="year"></span>
+
+            Jose' Online Shopping Mall
+
+        </p>
+
+
+        <p>
+
+            Secure Shopping • Fast Delivery •
+            Customer Support
+
+        </p>
+
+    </footer>
+
+
+
+    <!-- YEAR -->
+
+    <script>
+
+        document.getElementById("year").textContent =
+            new Date().getFullYear();
+
+    </script>
+
+
+
+    <!-- ADD TO CART -->
+
+    <script>
+
+        function addToCart() {
+
+            let quantity =
+                document.getElementById("quantity").value;
+
+            alert(
+                quantity +
+                " HP Laptop added to your cart!"
+            );
+
+        }
+
+    </script>
+
+
+
+    <!-- MAIN JAVASCRIPT -->
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+
+</body>
+
+</html>

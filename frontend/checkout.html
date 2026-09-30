@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Checkout - Jose' Online Shopping Mall</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        .checkout-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+        }
+
+        .checkout-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        .checkout-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .checkout-section h3 {
+            color: #6a1b9a;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f3e8ff;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .order-summary {
+            position: sticky;
+            top: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item-name {
+            font-weight: bold;
+        }
+
+        .order-item-quantity {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            margin-top: 10px;
+            border-top: 2px solid #ddd;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .payment-option {
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .payment-option:hover {
+            background-color: #f8f3ff;
+        }
+
+        .payment-option input {
+            margin-right: 10px;
+        }
+
+        .payment-description {
+            margin-left: 25px;
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .place-order-btn:hover {
+            background-color: #4a126b;
+        }
+
+        .place-order-btn:disabled {
+            background-color: #999;
+            cursor: not-allowed;
+        }
+
+        .back-cart {
+            display: inline-block;
+            margin-top: 15px;
+            color: #6a1b9a;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-cart:hover {
+            text-decoration: underline;
+        }
+
+        #message {
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 768px) {
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<header>
+
+    <div class="site-title">
+
+        <h1>
+            Jose' Online Shopping Mall
+        </h1>
+
+    </div>
+
+
+    <nav class="navbar">
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="user_dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="products.html">
+                    Products
+                </a>
+            </li>
+
+            <li>
+                <a href="categories.html">
+                    Categories
+                </a>
+            </li>
+
+            <li>
+                <a href="order_hitory.html">
+                    My Orders
+                </a>
+            </li>
+
+            <li>
+                <a href="shopping_cart.html">
+                    🛒 Cart
+                    (<span id="cartCount">0</span>)
+                </a>
+            </li>
+
+            <li>
+                <a href="user_profile.html">
+                    My Profile
+                </a>
+            </li>
+
+        </ul>
+
+
+        <div class="nav-right">
+
+            <button
+                id="logoutBtn"
+                class="login-btn">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ==========================================
+     CHECKOUT
+========================================== -->
+
+<main class="checkout-container">
+
+    <h2>
+        Checkout
+    </h2>
+
+
+    <p id="message"></p>
+
+
+    <div class="checkout-grid">
+
+
+        <!-- ======================================
+             CUSTOMER INFORMATION
+        ======================================= -->
+
+        <div>
+
+            <section class="checkout-section">
+
+                <h3>
+                    Customer Information
+                </h3>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="firstName">
+                            First Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="firstName"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="lastName">
+                            Last Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="lastName"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="phone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="phone"
+                        placeholder="e.g. 0712345678"
+                        required
+                    >
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ======================================
+                 DELIVERY INFORMATION
+            ======================================= -->
+
+            <section class="checkout-section">
+
+                <h3>
+                    Delivery Information
+                </h3>
+
+
+                <div class="form-group">
+
+                    <label for="county">
+                        County
+                    </label>
+
+                    <select id="county" required>
+
+                        <option value="">
+                            Select County
+                        </option>
+
+                        <option value="Nairobi">
+                            Nairobi
+                        </option>
+
+                        <option value="Mombasa">
+                            Mombasa
+                        </option>
+
+                        <option value="Kisumu">
+                            Kisumu
+                        </option>
+
+                        <option value="Nakuru">
+                            Nakuru
+                        </option>
+
+                        <option value="Kiambu">
+                            Kiambu
+                        </option>
+
+                        <option value="Machakos">
+                            Machakos
+                        </option>
+
+                        <option value="Kajiado">
+                            Kajiado
+                        </option>
+
+                        <option value="Uasin Gishu">
+                            Uasin Gishu
+                        </option>
+
+                        <option value="Kakamega">
+                            Kakamega
+                        </option>
+
+                        <option value="Meru">
+                            Meru
+                        </option>
+
+                        <option value="Nyeri">
+                            Nyeri
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="town">
+                        Town / City
+                    </label>
+
+                    <input
+                        type="text"
+                        id="town"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="address">
+                        Delivery Address
+                    </label>
+
+                    <textarea
+                        id="address"
+                        placeholder="Enter your complete delivery address..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="deliveryInstructions">
+                        Delivery Instructions (Optional)
+                    </label>
+
+                    <textarea
+                        id="deliveryInstructions"
+                        placeholder="Any special instructions for delivery..."
+                    ></textarea>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- ======================================
+                 PAYMENT
+            ======================================= -->
+
+            <section class="checkout-section">
+
+                <h3>
+                    Payment Method
+                </h3>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="mpesa"
+                        checked
+                    >
+
+                    <strong>
+                        M-Pesa
+                    </strong>
+
+                    <div class="payment-description">
+
+                        Pay securely using M-Pesa.
+
+                    </div>
+
+                </label>
+
+
+                <label class="payment-option">
+
+                    <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="cash"
+                    >
+
+                    <strong>
+                        Cash on Delivery
+                    </strong>
+
+                    <div class="payment-description">
+
+                        Pay when your order is delivered.
+
+                    </div>
+
+                </label>
+
+            </section>
+
+        </div>
+
+
+
+        <!-- ======================================
+             ORDER SUMMARY
+        ======================================= -->
+
+        <div>
+
+            <section class="checkout-section order-summary">
+
+                <h3>
+                    Order Summary
+                </h3>
+
+
+                <div id="orderItems">
+
+                    <p>
+                        Loading your cart...
+                    </p>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <span id="subtotal">
+                        KSh 0.00
+                    </span>
+
+                </div>
+
+
+                <div class="price-row">
+
+                    <span>
+                        Delivery
+                    </span>
+
+                    <span id="deliveryFee">
+                        KSh 0.00
+                    </span>
+
+                </div>
+
+
+                <div class="total-row">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span id="total">
+                        KSh 0.00
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="placeOrderBtn"
+                    class="place-order-btn"
+                    disabled
+                >
+
+                    Place Order
+
+                </button>
+
+
+                <a
+                    href="shopping_cart.html"
+                    class="back-cart">
+
+                    ← Back to Shopping Cart
+
+                </a>
+
+            </section>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <p>
+
+        &copy;
+
+        <span id="year"></span>
+
+        Jose' Online Shopping Mall
+
+    </p>
+
+
+    <p>
+
+        Secure Shopping • Fast Delivery • Customer Support
+
+    </p>
+
+</footer>
+
+
+
+<!-- ==========================================
+     JAVASCRIPT
+========================================== -->
+
+<script>
+
+    // ==========================================
+    // DJANGO API
+    // ==========================================
+
+    const CHECKOUT_API_URL =
+        "http://127.0.0.1:8000";
+
+
+    // ==========================================
+    // GET ACCESS TOKEN
+    // ==========================================
+
+    const accessToken =
+        localStorage.getItem("access");
+
+
+    // ==========================================
+    // CHECK LOGIN
+    // ==========================================
+
+    if (!accessToken) {
+
+        window.location.href =
+            "/frontend/login.html";
+
+    }
+
+
+    // ==========================================
+    // CURRENT YEAR
+    // ==========================================
+
+    document
+        .getElementById("year")
+        .textContent =
+        new Date().getFullYear();
+
+
+    // ==========================================
+    // LOAD USER INFORMATION
+    // ==========================================
+
+    async function loadUserInformation() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${CHECKOUT_API_URL}/users/me/`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${accessToken}`,
+
+                            "Content-Type":
+                                "application/json"
+                        }
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+
+                window.location.href =
+                    "/frontend/login.html";
+
+                return;
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (response.ok) {
+
+                document
+                    .getElementById("firstName")
+                    .value =
+                    data.first_name || "";
+
+
+                document
+                    .getElementById("lastName")
+                    .value =
+                    data.last_name || "";
+
+
+                document
+                    .getElementById("email")
+                    .value =
+                    data.email || "";
+
+
+                document
+                    .getElementById("phone")
+                    .value =
+                    data.phone || "";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to load user information:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // LOAD CART
+    // ==========================================
+
+    async function loadCart() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${CHECKOUT_API_URL}/shop/cart/`,
+                    {
+                        method: "GET",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${accessToken}`,
+
+                            "Content-Type":
+                                "application/json"
+                        }
+                    }
+                );
+
+
+            if (response.status === 401) {
+
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+
+                window.location.href =
+                    "/frontend/login.html";
+
+                return;
+
+            }
+
+
+            const cart =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    cart.detail ||
+                    "Unable to load cart."
+                );
+
+            }
+
+
+            displayCart(cart);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Unable to load cart:",
+                error
+            );
+
+
+            document
+                .getElementById("message")
+                .style.color =
+                "red";
+
+
+            document
+                .getElementById("message")
+                .textContent =
+                "Unable to load your shopping cart.";
+
+        }
+
+    }
+
+
+    // ==========================================
+    // DISPLAY CART
+    // ==========================================
+
+    function displayCart(cart) {
+
+        const orderItems =
+            document.getElementById(
+                "orderItems"
+            );
+
+
+        orderItems.innerHTML = "";
+
+
+        // --------------------------------------
+        // EMPTY CART
+        // --------------------------------------
+
+        if (
+            !cart.items ||
+            cart.items.length === 0
+        ) {
+
+            orderItems.innerHTML = `
+
+                <p>
+                    Your shopping cart is empty.
+                </p>
+
+            `;
+
+
+            document
+                .getElementById("subtotal")
+                .textContent =
+                "KSh 0.00";
+
+
+            document
+                .getElementById("deliveryFee")
+                .textContent =
+                "KSh 0.00";
+
+
+            document
+                .getElementById("total")
+                .textContent =
+                "KSh 0.00";
+
+
+            document
+                .getElementById("placeOrderBtn")
+                .disabled =
+                true;
+
+
+            updateCheckoutCartCount(cart);
+
+            return;
+
+        }
+
+
+        // --------------------------------------
+        // DISPLAY ITEMS
+        // --------------------------------------
+
+        cart.items.forEach(function(item) {
+
+            const itemElement =
+                document.createElement("div");
+
+
+            itemElement.className =
+                "order-item";
+
+
+            itemElement.innerHTML = `
+
+                <div>
+
+                    <div class="order-item-name">
+
+                        ${item.product.name}
+
+                    </div>
+
+                    <div class="order-item-quantity">
+
+                        Quantity:
+                        ${item.quantity}
+
+                    </div>
+
+                </div>
+
+
+                <div>
+
+                    KSh ${Number(
+                        item.subtotal
+                    ).toFixed(2)}
+
+                </div>
+
+            `;
+
+
+            orderItems.appendChild(
+                itemElement
+            );
+
+        });
+
+
+        // --------------------------------------
+        // CALCULATE TOTALS
+        // --------------------------------------
+
+        const subtotal =
+            Number(cart.total) || 0;
+
+
+        const delivery =
+            subtotal > 0 ? 200 : 0;
+
+
+        const total =
+            subtotal + delivery;
+
+
+        document
+            .getElementById("subtotal")
+            .textContent =
+            `KSh ${subtotal.toFixed(2)}`;
+
+
+        document
+            .getElementById("deliveryFee")
+            .textContent =
+            `KSh ${delivery.toFixed(2)}`;
+
+
+        document
+            .getElementById("total")
+            .textContent =
+            `KSh ${total.toFixed(2)}`;
+
+
+        document
+            .getElementById("placeOrderBtn")
+            .disabled =
+            false;
+
+
+        updateCheckoutCartCount(cart);
+
+    }
+
+
+    // ==========================================
+    // UPDATE CART COUNT
+    // ==========================================
+
+    function updateCheckoutCartCount(cart) {
+
+        let count = 0;
+
+
+        if (cart.items) {
+
+            cart.items.forEach(function(item) {
+
+                count +=
+                    Number(item.quantity) || 0;
+
+            });
+
+        }
+
+
+        const cartCount =
+            document.getElementById(
+                "cartCount"
+            );
+
+
+        if (cartCount) {
+
+            cartCount.textContent =
+                count;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // PLACE ORDER
+    // ==========================================
+
+    document
+        .getElementById("placeOrderBtn")
+        .addEventListener(
+            "click",
+            placeOrder
+        );
+
+
+    async function placeOrder() {
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const firstName =
+            document.getElementById(
+                "firstName"
+            ).value.trim();
+
+
+        const lastName =
+            document.getElementById(
+                "lastName"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "email"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
+
+
+        const county =
+            document.getElementById(
+                "county"
+            ).value;
+
+
+        const town =
+            document.getElementById(
+                "town"
+            ).value.trim();
+
+
+        const address =
+            document.getElementById(
+                "address"
+            ).value.trim();
+
+
+        const deliveryInstructions =
+            document.getElementById(
+                "deliveryInstructions"
+            ).value.trim();
+
+
+        const paymentMethod =
+            document.querySelector(
+                'input[name="paymentMethod"]:checked'
+            );
+
+
+        // ======================================
+        // VALIDATION
+        // ======================================
+
+        if (
+            !firstName ||
+            !lastName ||
+            !email ||
+            !phone ||
+            !county ||
+            !town ||
+            !address
+        ) {
+
+            message.style.color =
+                "red";
+
+
+            message.textContent =
+                "Please complete all required information.";
+
+
+            return;
+
+        }
+
+
+        if (!paymentMethod) {
+
+            message.style.color =
+                "red";
+
+
+            message.textContent =
+                "Please select a payment method.";
+
+
+            return;
+
+        }
+
+
+        // ======================================
+        // DISABLE BUTTON
+        // ======================================
+
+        const button =
+            document.getElementById(
+                "placeOrderBtn"
+            );
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Processing Order...";
+
+
+        message.style.color =
+            "#6a1b9a";
+
+
+        message.textContent =
+            "Creating your order...";
+
+
+        try {
+
+            // ==================================
+            // CREATE DJANGO ORDER
+            // ==================================
+
+            const response =
+                await fetch(
+                    `${CHECKOUT_API_URL}/shop/orders/create/`,
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Authorization":
+                                `Bearer ${accessToken}`,
+
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+
+                            payment_method:
+                                paymentMethod.value,
+
+                            first_name:
+                                firstName,
+
+                            last_name:
+                                lastName,
+
+                            email:
+                                email,
+
+                            phone:
+                                phone,
+
+                            county:
+                                county,
+
+                            town:
+                                town,
+
+                            address:
+                                address,
+
+                            delivery_instructions:
+                                deliveryInstructions
+
+                        })
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            // ==================================
+            // SUCCESS
+            // ==================================
+
+            if (response.status === 201) {
+
+                message.style.color =
+                    "green";
+
+
+                message.innerHTML = `
+
+                    Order placed successfully!<br>
+
+                    Order Number:
+                    <strong>#${data.id}</strong>
+
+                    <br><br>
+
+                    Redirecting to your order history...
+
+                `;
+
+
+                // Cart has already been
+                // emptied by Django
+
+                updateCheckoutCartCount({
+                    items: []
+                });
+
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "Order Placed";
+
+
+                // ==================================
+                // REDIRECT
+                // ==================================
+
+                setTimeout(function() {
+
+                    window.location.href =
+                        "/frontend/order_hitory.html";
+
+                }, 2000);
+
+            }
+
+
+            // ==================================
+            // ORDER FAILED
+            // ==================================
+
+            else {
+
+                message.style.color =
+                    "red";
+
+
+                message.textContent =
+                    data.detail ||
+                    "Unable to create your order.";
+
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "Place Order";
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Order error:",
+                error
+            );
+
+
+            message.style.color =
+                "red";
+
+
+            message.textContent =
+                "Unable to connect to the server. Please try again.";
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Place Order";
+
+        }
+
+    }
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    document
+        .getElementById("logoutBtn")
+        .addEventListener(
+            "click",
+            function() {
+
+                localStorage.removeItem(
+                    "access"
+                );
+
+                localStorage.removeItem(
+                    "refresh"
+                );
+
+
+                window.location.href =
+                    "/frontend/login.html";
+
+            }
+        );
+
+
+    // ==========================================
+    // START PAGE
+    // ==========================================
+
+    loadUserInformation();
+
+    loadCart();
+
+</script>
+
+</body>
+
+</html>
