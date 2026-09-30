@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 
+
 # Virtual environment
 venv/
 env/
@@ -13,6 +14,8 @@ db.sqlite3
 *.log
 media/
 staticfiles/
+django.log
+data_backup.json
 
 # Environment variables and secrets
 .env
