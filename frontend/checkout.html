@@ -241,7 +241,7 @@
             </li>
 
             <li>
-                <a href="order_hitory.html">
+                <a href="orders_history.html">
                     My Orders
                 </a>
             </li>
@@ -401,53 +401,18 @@
                             Select County
                         </option>
 
-                        <option value="Nairobi">
-                            Nairobi
-                        </option>
-
-                        <option value="Mombasa">
-                            Mombasa
-                        </option>
-
-                        <option value="Kisumu">
-                            Kisumu
-                        </option>
-
-                        <option value="Nakuru">
-                            Nakuru
-                        </option>
-
-                        <option value="Kiambu">
-                            Kiambu
-                        </option>
-
-                        <option value="Machakos">
-                            Machakos
-                        </option>
-
-                        <option value="Kajiado">
-                            Kajiado
-                        </option>
-
-                        <option value="Uasin Gishu">
-                            Uasin Gishu
-                        </option>
-
-                        <option value="Kakamega">
-                            Kakamega
-                        </option>
-
-                        <option value="Meru">
-                            Meru
-                        </option>
-
-                        <option value="Nyeri">
-                            Nyeri
-                        </option>
-
-                        <option value="Other">
-                            Other
-                        </option>
+                        <option value="Nairobi">Nairobi</option>
+                        <option value="Mombasa">Mombasa</option>
+                        <option value="Kisumu">Kisumu</option>
+                        <option value="Nakuru">Nakuru</option>
+                        <option value="Kiambu">Kiambu</option>
+                        <option value="Machakos">Machakos</option>
+                        <option value="Kajiado">Kajiado</option>
+                        <option value="Uasin Gishu">Uasin Gishu</option>
+                        <option value="Kakamega">Kakamega</option>
+                        <option value="Meru">Meru</option>
+                        <option value="Nyeri">Nyeri</option>
+                        <option value="Other">Other</option>
 
                     </select>
 
@@ -707,7 +672,7 @@
     if (!accessToken) {
 
         window.location.href =
-            "/frontend/login.html";
+            "login.html";
 
     }
 
@@ -753,7 +718,7 @@
                 localStorage.removeItem("refresh");
 
                 window.location.href =
-                    "/frontend/login.html";
+                    "login.html";
 
                 return;
 
@@ -836,7 +801,7 @@
                 localStorage.removeItem("refresh");
 
                 window.location.href =
-                    "/frontend/login.html";
+                    "login.html";
 
                 return;
 
@@ -1307,12 +1272,17 @@
                 `;
 
 
-                // Cart has already been
-                // emptied by Django
-
+                // Django has emptied the cart
                 updateCheckoutCartCount({
                     items: []
                 });
+
+
+                // Keep local cart count synchronized
+                localStorage.setItem(
+                    "cartCount",
+                    "0"
+                );
 
 
                 button.disabled =
@@ -1324,13 +1294,13 @@
 
 
                 // ==================================
-                // REDIRECT
+                // REDIRECT TO CORRECT ORDER HISTORY
                 // ==================================
 
                 setTimeout(function() {
 
                     window.location.href =
-                        "/frontend/order_hitory.html";
+                        "orders_history.html";
 
                 }, 2000);
 
@@ -1409,9 +1379,13 @@
                     "refresh"
                 );
 
+                localStorage.removeItem(
+                    "cartCount"
+                );
+
 
                 window.location.href =
-                    "/frontend/login.html";
+                    "login.html";
 
             }
         );

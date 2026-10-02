@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Shopping Cart - Jose' Online Shopping Mall</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        header {
+            background-color: #4b0082;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #d8b4fe;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #4b0082;
+            text-align: center;
+        }
+
+        #cart-list {
+            margin-top: 20px;
+        }
+
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .cart-item p {
+            margin: 8px 0;
+            font-size: 17px;
+        }
+
+        .cart-item button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background-color: #b02a37;
+        }
+
+        .cart-summary {
+            margin-top: 25px;
+            padding: 20px;
+            border-top: 2px solid #4b0082;
+            text-align: right;
+        }
+
+        .cart-summary h3 {
+            color: #4b0082;
+            font-size: 22px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #4b0082;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #6a0dad;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 18px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>Jose' Online Shopping Mall</h1>
+
+    <p>Shopping Cart</p>
+
+</header>
+
+
+<nav>
+
+    <a href="index.html">Home</a>
+
+    <a href="products.html">Products</a>
+
+    <a href="categories.html">Categories</a>
+
+    <a href="cart.html">
+        Cart
+        (<span id="cartCount">0</span>)
+    </a>
+
+    <a href="orders_history.html">
+        My Orders
+    </a>
+
+    <a href="user_dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="#" onclick="logout()">
+        Logout
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+    <h2>My Shopping Cart</h2>
+
+
+    <!--
+        IMPORTANT:
+        cart.js expects this exact ID:
+        cart-list
+    -->
+
+    <div id="cart-list">
+
+        <p class="empty-cart">
+            Loading cart...
+        </p>
+
+    </div>
+
+
+    <div class="cart-summary">
+
+        <h3>
+            Total:
+            KSh <span id="cartTotal">0.00</span>
+        </h3>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <a href="products.html" class="btn">
+            Continue Shopping
+        </a>
+
+        <a href="checkout.html" class="btn">
+            Proceed to Checkout
+        </a>
+
+    </div>
+
+</div>
+
+
+<footer>
+
+    <p>
+        &copy; 2026 Jose' Online Shopping Mall.
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+<!-- Global Cart JavaScript -->
+<script src="js/cart.js"></script>
+
+<script>
+
+    // ==========================================
+    // LOAD AND DISPLAY CART
+    // ==========================================
+
+    async function loadShoppingCart() {
+
+        const cart = await fetchCart();
+
+        if (!cart) {
+
+            document.getElementById("cart-list").innerHTML =
+                '<p class="empty-cart">Unable to load your cart.</p>';
+
+            document.getElementById("cartTotal").textContent = "0.00";
+
+            return;
+        }
+
+        // Display the cart items
+        showCart(cart);
+
+        // Display cart total
+        let total = 0;
+
+        if (cart.items && Array.isArray(cart.items)) {
+
+            cart.items.forEach(function(item) {
+
+                total += Number(item.subtotal) || 0;
+
+            });
+
+        }
+
+        document.getElementById("cartTotal").textContent =
+            total.toFixed(2);
+
+    }
+
+
+    // ==========================================
+    // LOGOUT
+    // ==========================================
+
+    function logout() {
+
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+        localStorage.removeItem("user");
+        localStorage.removeItem("cartCount");
+
+        window.location.href = "login.html";
+
+    }
+
+
+    // ==========================================
+    // START CART
+    // ==========================================
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            loadShoppingCart();
+
+        }
+    );
+
+</script>
+
+</body>
+
+</html>

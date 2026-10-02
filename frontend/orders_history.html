@@ -445,7 +445,7 @@
             </li>
 
             <li>
-                <a href="order_hitory.html"
+                <a href="orders_history.html"
                    class="active">
                     My Orders
                 </a>
@@ -1528,39 +1528,21 @@
     }
 
 
-    // ==========================================
-    // LOGOUT
-    // ==========================================
 
-    function logoutUser() {
+// ==========================================
+// LOGOUT
+// ==========================================
 
-        localStorage.removeItem(
-            "access"
-        );
+function logoutUser() {
 
-        localStorage.removeItem(
-            "refresh"
-        );
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPhone");
 
-        localStorage.removeItem(
-            "userName"
-        );
-
-        localStorage.removeItem(
-            "userEmail"
-        );
-
-        localStorage.removeItem(
-            "userPhone"
-        );
-
-
-        window.location.href =
-            "login.html";
-
-    }
-
-
+    window.location.href = "login.html";
+}
     // ==========================================
     // LOGOUT BUTTON
     // ==========================================
@@ -1580,6 +1562,7 @@
     loadOrders();
 
 </script>
+<script src="js/orders.js"></script>
 <script src="js/cart.js"></script>
 
 </body>

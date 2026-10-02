@@ -1,10 +1,15 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
 
 from .models import MpesaPayment
 from .serializers import MpesaPaymentSerializer
 from shop.models import Order
+from .mpesa import initiate_stk_push
 
 
 class MpesaPaymentInitiateView(generics.CreateAPIView):
@@ -67,22 +72,61 @@ class MpesaPaymentInitiateView(generics.CreateAPIView):
         )
 
         # -------------------------------------------------
-        # M-PESA STK PUSH WILL BE ADDED HERE
+        # INITIATE M-PESA STK PUSH
         # -------------------------------------------------
+
+        mpesa_response = initiate_stk_push(
+            phone_number=phone_number,
+            amount=payment.amount,
+            account_reference=f"ORDER-{order.id}",
+            transaction_desc=f"Payment for Order {order.id}"
+        )
+
+        print("M-PESA STK RESPONSE:")
+        print(mpesa_response)
+
+        # -------------------------------------------------
+        # CHECK M-PESA RESPONSE
+        # -------------------------------------------------
+
+        if mpesa_response.get("ResponseCode") == "0":
+
+            return Response(
+                {
+                    "detail": "STK Push sent successfully. Check your phone.",
+                    "payment_id": payment.id,
+                    "order_id": order.id,
+                    "amount": str(payment.amount),
+                    "phone": payment.phone,
+                    "status": payment.status,
+                    "merchant_request_id": mpesa_response.get(
+                        "MerchantRequestID"
+                    ),
+                    "checkout_request_id": mpesa_response.get(
+                        "CheckoutRequestID"
+                    ),
+                    "customer_message": mpesa_response.get(
+                        "CustomerMessage"
+                    ),
+                },
+                status=status.HTTP_201_CREATED
+            )
+
+        # -------------------------------------------------
+        # STK PUSH FAILED
+        # -------------------------------------------------
+
+        payment.status = "failed"
+        payment.save()
 
         return Response(
             {
-                "detail": "Payment record created. M-Pesa STK Push will be initiated here.",
+                "detail": "M-Pesa STK Push could not be initiated.",
                 "payment_id": payment.id,
-                "order_id": order.id,
-                "amount": str(payment.amount),
-                "phone": payment.phone,
-                "status": payment.status
+                "mpesa_response": mpesa_response,
             },
-            status=status.HTTP_201_CREATED
+            status=status.HTTP_400_BAD_REQUEST
         )
-
-
 class MpesaPaymentStatusView(generics.RetrieveAPIView):
 
     serializer_class = MpesaPaymentSerializer
@@ -94,3 +138,23 @@ class MpesaPaymentStatusView(generics.RetrieveAPIView):
         return MpesaPayment.objects.filter(
             user=self.request.user
         )
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def mpesa_callback(request):
+    """
+    Receive M-Pesa STK Push callback from Safaricom.
+    """
+
+    print("====================================")
+    print("M-PESA CALLBACK RECEIVED")
+    print("====================================")
+    print(request.data)
+
+    return Response(
+        {
+            "ResultCode": 0,
+            "ResultDesc": "Accepted"
+        },
+        status=status.HTTP_200_OK
+    )

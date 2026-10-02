@@ -16,6 +16,7 @@ media/
 staticfiles/
 django.log
 data_backup.json
+jose_shop_backup.sql
 
 # Environment variables and secrets
 .env
