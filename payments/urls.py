@@ -3,6 +3,7 @@ from . import views
 from .views import (
     MpesaPaymentInitiateView,
     MpesaPaymentStatusView,
+    MpesaPaymentQueryView,
 )
 
 urlpatterns = [
@@ -19,8 +20,15 @@ urlpatterns = [
     ),
 
     path(
+        'query/<int:order_id>/',
+        MpesaPaymentQueryView.as_view(),
+        name='mpesa-query'
+    ),
+
+    path(
         'mpesa/callback/',
         views.mpesa_callback,
         name='mpesa-callback'
     ),
 ]
+exit()

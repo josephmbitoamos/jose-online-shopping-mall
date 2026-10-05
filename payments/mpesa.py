@@ -76,3 +76,45 @@ def initiate_stk_push(phone_number, amount, account_reference, transaction_desc)
     )
 
     return response.json()
+def query_stk_push(checkout_request_id):
+    """
+    Query the status of an M-Pesa STK Push transaction.
+    """
+
+    access_token = get_access_token()
+
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+
+    shortcode = settings.MPESA_SHORTCODE
+    passkey = settings.MPESA_PASSKEY
+
+    password_string = f"{shortcode}{passkey}{timestamp}"
+
+    password = base64.b64encode(
+        password_string.encode()
+    ).decode("utf-8")
+
+    url = (
+        "https://sandbox.safaricom.co.ke/"
+        "mpesa/stkpushquery/v1/query"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "BusinessShortCode": shortcode,
+        "Password": password,
+        "Timestamp": timestamp,
+        "CheckoutRequestID": checkout_request_id,
+    }
+
+    response = requests.post(
+        url,
+        json=payload,
+        headers=headers
+    )
+
+    return response.json()

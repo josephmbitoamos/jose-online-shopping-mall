@@ -177,6 +177,17 @@
             text-align: center;
             font-weight: bold;
             margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .payment-waiting {
+            background-color: #fff8e1;
+            border: 1px solid #ffcc80;
+            border-radius: 7px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
         }
 
         @media (max-width: 768px) {
@@ -362,7 +373,7 @@
                 <div class="form-group">
 
                     <label for="phone">
-                        Phone Number
+                        M-Pesa Phone Number
                     </label>
 
                     <input
@@ -492,7 +503,7 @@
 
                     <div class="payment-description">
 
-                        Pay securely using M-Pesa.
+                        Pay securely using M-Pesa STK Push.
 
                     </div>
 
@@ -596,6 +607,16 @@
                     Place Order
 
                 </button>
+
+
+                <div
+                    id="paymentWaiting"
+                    class="payment-waiting">
+
+                    Please check your phone and enter your
+                    M-Pesa PIN to complete the payment.
+
+                </div>
 
 
                 <a
@@ -1049,6 +1070,325 @@
 
 
     // ==========================================
+    // FORMAT PHONE NUMBER
+    // ==========================================
+
+    function formatPhoneNumber(phone) {
+
+        phone =
+            phone.replace(
+                /\s+/g,
+                ""
+            );
+
+
+        if (phone.startsWith("0")) {
+
+            return "254" +
+                phone.substring(1);
+
+        }
+
+
+        if (phone.startsWith("+254")) {
+
+            return phone.substring(1);
+
+        }
+
+
+        return phone;
+
+    }
+
+
+    // ==========================================
+    // VALIDATE PHONE NUMBER
+    // ==========================================
+
+    function isValidKenyanPhone(phone) {
+
+        return /^2547\d{8}$/.test(phone);
+
+    }
+
+
+    // ==========================================
+    // CREATE ORDER
+    // ==========================================
+
+    async function createOrder(
+        firstName,
+        lastName,
+        email,
+        phone,
+        county,
+        town,
+        address,
+        deliveryInstructions,
+        paymentMethod
+    ) {
+
+        const response =
+            await fetch(
+                `${CHECKOUT_API_URL}/shop/orders/create/`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        payment_method:
+                            paymentMethod,
+
+                        first_name:
+                            firstName,
+
+                        last_name:
+                            lastName,
+
+                        email:
+                            email,
+
+                        phone:
+                            phone,
+
+                        county:
+                            county,
+
+                        town:
+                            town,
+
+                        address:
+                            address,
+
+                        delivery_instructions:
+                            deliveryInstructions
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Unable to create your order."
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    // ==========================================
+    // INITIATE M-PESA STK PUSH
+    // ==========================================
+
+    async function initiateMpesaPayment(
+        orderId,
+        phone
+    ) {
+
+        const response =
+            await fetch(
+                `${CHECKOUT_API_URL}/payments/stkpush/`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        order_id:
+                            orderId,
+
+                        phone_number:
+                            phone
+
+                    })
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Unable to initiate M-Pesa payment."
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    // ==========================================
+    // CHECK M-PESA PAYMENT STATUS
+    // ==========================================
+
+    async function checkPaymentStatus(
+        orderId
+    ) {
+
+        const response =
+            await fetch(
+                `${CHECKOUT_API_URL}/payments/status/${orderId}/`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${accessToken}`,
+
+                        "Content-Type":
+                            "application/json"
+                    }
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.detail ||
+                "Unable to check payment status."
+            );
+
+        }
+
+
+        return data;
+
+    }
+
+
+    // ==========================================
+    // WAIT FOR M-PESA PAYMENT
+    // ==========================================
+
+    async function waitForMpesaPayment(
+        orderId
+    ) {
+
+        const maxAttempts = 24;
+
+        const interval =
+            5000;
+
+
+        for (
+            let attempt = 1;
+            attempt <= maxAttempts;
+            attempt++
+        ) {
+
+            try {
+
+                const payment =
+                    await checkPaymentStatus(
+                        orderId
+                    );
+
+
+                console.log(
+                    "M-Pesa payment status:",
+                    payment.status
+                );
+
+
+                if (
+                    payment.status ===
+                    "success"
+                ) {
+
+                    return {
+                        success: true,
+                        payment: payment
+                    };
+
+                }
+
+
+                if (
+                    payment.status ===
+                    "failed"
+                ) {
+
+                    return {
+                        success: false,
+                        payment: payment
+                    };
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Payment status error:",
+                    error
+                );
+
+            }
+
+
+            await new Promise(
+                function(resolve) {
+
+                    setTimeout(
+                        resolve,
+                        interval
+                    );
+
+                }
+            );
+
+        }
+
+
+        return {
+            success: false,
+            timeout: true
+        };
+
+    }
+
+
+    // ==========================================
     // PLACE ORDER
     // ==========================================
 
@@ -1065,6 +1405,18 @@
         const message =
             document.getElementById(
                 "message"
+            );
+
+
+        const button =
+            document.getElementById(
+                "placeOrderBtn"
+            );
+
+
+        const paymentWaiting =
+            document.getElementById(
+                "paymentWaiting"
             );
 
 
@@ -1086,7 +1438,7 @@
             ).value.trim();
 
 
-        const phone =
+        const phoneInput =
             document.getElementById(
                 "phone"
             ).value.trim();
@@ -1130,7 +1482,7 @@
             !firstName ||
             !lastName ||
             !email ||
-            !phone ||
+            !phoneInput ||
             !county ||
             !town ||
             !address
@@ -1165,14 +1517,37 @@
 
 
         // ======================================
-        // DISABLE BUTTON
+        // FORMAT PHONE
         // ======================================
 
-        const button =
-            document.getElementById(
-                "placeOrderBtn"
+        const phone =
+            formatPhoneNumber(
+                phoneInput
             );
 
+
+        if (
+            paymentMethod.value ===
+            "mpesa" &&
+            !isValidKenyanPhone(phone)
+        ) {
+
+            message.style.color =
+                "red";
+
+
+            message.textContent =
+                "Please enter a valid Kenyan M-Pesa number, e.g. 0712345678.";
+
+
+            return;
+
+        }
+
+
+        // ======================================
+        // DISABLE BUTTON
+        // ======================================
 
         button.disabled =
             true;
@@ -1190,69 +1565,44 @@
             "Creating your order...";
 
 
+        paymentWaiting.style.display =
+            "none";
+
+
         try {
 
             // ==================================
-            // CREATE DJANGO ORDER
+            // CREATE ORDER
             // ==================================
 
-            const response =
-                await fetch(
-                    `${CHECKOUT_API_URL}/shop/orders/create/`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Authorization":
-                                `Bearer ${accessToken}`,
-
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body: JSON.stringify({
-
-                            payment_method:
-                                paymentMethod.value,
-
-                            first_name:
-                                firstName,
-
-                            last_name:
-                                lastName,
-
-                            email:
-                                email,
-
-                            phone:
-                                phone,
-
-                            county:
-                                county,
-
-                            town:
-                                town,
-
-                            address:
-                                address,
-
-                            delivery_instructions:
-                                deliveryInstructions
-
-                        })
-                    }
+            const order =
+                await createOrder(
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    county,
+                    town,
+                    address,
+                    deliveryInstructions,
+                    paymentMethod.value
                 );
 
 
-            const data =
-                await response.json();
+            console.log(
+                "Order created:",
+                order
+            );
 
 
             // ==================================
-            // SUCCESS
+            // CASH ON DELIVERY
             // ==================================
 
-            if (response.status === 201) {
+            if (
+                paymentMethod.value ===
+                "cash"
+            ) {
 
                 message.style.color =
                     "green";
@@ -1263,7 +1613,12 @@
                     Order placed successfully!<br>
 
                     Order Number:
-                    <strong>#${data.id}</strong>
+                    <strong>#${order.id}</strong>
+
+                    <br><br>
+
+                    Payment Method:
+                    <strong>Cash on Delivery</strong>
 
                     <br><br>
 
@@ -1272,44 +1627,210 @@
                 `;
 
 
-                // Django has emptied the cart
                 updateCheckoutCartCount({
                     items: []
                 });
 
 
-                // Keep local cart count synchronized
                 localStorage.setItem(
                     "cartCount",
                     "0"
                 );
 
 
-                button.disabled =
-                    true;
-
-
                 button.textContent =
                     "Order Placed";
 
 
-                // ==================================
-                // REDIRECT TO CORRECT ORDER HISTORY
-                // ==================================
+                setTimeout(
+                    function() {
 
-                setTimeout(function() {
+                        window.location.href =
+                            "orders_history.html";
 
-                    window.location.href =
-                        "orders_history.html";
+                    },
+                    2000
+                );
 
-                }, 2000);
+
+                return;
 
             }
 
 
             // ==================================
-            // ORDER FAILED
+            // M-PESA STK PUSH
             // ==================================
+
+            message.style.color =
+                "#6a1b9a";
+
+
+            message.innerHTML = `
+
+                Order
+                <strong>#${order.id}</strong>
+                created.
+
+                <br><br>
+
+                Sending M-Pesa payment request...
+
+            `;
+
+
+            const mpesa =
+                await initiateMpesaPayment(
+                    order.id,
+                    phone
+                );
+
+
+            console.log(
+                "M-Pesa response:",
+                mpesa
+            );
+
+
+            message.style.color =
+                "#6a1b9a";
+
+
+            message.innerHTML = `
+
+                M-Pesa payment request sent!
+
+                <br><br>
+
+                <strong>
+                    Please check your phone
+                </strong>
+
+                and enter your M-Pesa PIN.
+
+            `;
+
+
+            paymentWaiting.style.display =
+                "block";
+
+
+            button.textContent =
+                "Waiting for Payment...";
+
+
+            // ==================================
+            // WAIT FOR CALLBACK
+            // ==================================
+
+            const paymentResult =
+                await waitForMpesaPayment(
+                    order.id
+                );
+
+
+            // ==================================
+            // PAYMENT SUCCESS
+            // ==================================
+
+            if (
+                paymentResult.success
+            ) {
+
+                message.style.color =
+                    "green";
+
+
+                const receipt =
+                    paymentResult.payment
+                        .mpesa_receipt;
+
+
+                message.innerHTML = `
+
+                    Payment successful!
+
+                    <br><br>
+
+                    Order Number:
+                    <strong>#${order.id}</strong>
+
+                    ${
+                        receipt
+                            ? `<br> M-Pesa Receipt:
+                               <strong>${receipt}</strong>`
+                            : ""
+                    }
+
+                    <br><br>
+
+                    Redirecting to your order history...
+
+                `;
+
+
+                paymentWaiting.style.display =
+                    "none";
+
+
+                updateCheckoutCartCount({
+                    items: []
+                });
+
+
+                localStorage.setItem(
+                    "cartCount",
+                    "0"
+                );
+
+
+                button.textContent =
+                    "Payment Successful";
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "orders_history.html";
+
+                    },
+                    2000
+                );
+
+
+                return;
+
+            }
+
+
+            // ==================================
+            // PAYMENT FAILED
+            // ==================================
+
+            if (
+                paymentResult.payment
+            ) {
+
+                message.style.color =
+                    "red";
+
+
+                message.innerHTML = `
+
+                    M-Pesa payment was not completed.
+
+                    <br><br>
+
+                    ${
+                        paymentResult.payment
+                            .result_description ||
+                        "Please try again."
+                    }
+
+                `;
+
+            }
 
             else {
 
@@ -1317,26 +1838,37 @@
                     "red";
 
 
-                message.textContent =
-                    data.detail ||
-                    "Unable to create your order.";
+                message.innerHTML = `
 
+                    We could not confirm your M-Pesa payment.
 
-                button.disabled =
-                    false;
+                    <br><br>
 
+                    Please check your M-Pesa messages
+                    and your order history.
 
-                button.textContent =
-                    "Place Order";
+                `;
 
             }
+
+
+            paymentWaiting.style.display =
+                "none";
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Try Payment Again";
 
         }
 
         catch (error) {
 
             console.error(
-                "Order error:",
+                "Order/payment error:",
                 error
             );
 
@@ -1345,8 +1877,15 @@
                 "red";
 
 
-            message.textContent =
-                "Unable to connect to the server. Please try again.";
+            message.innerHTML = `
+
+                ${error.message}
+
+            `;
+
+
+            paymentWaiting.style.display =
+                "none";
 
 
             button.disabled =
